@@ -1,6 +1,6 @@
 <?php
 // 1. Connect to database
-$conn = mysqli_connect("localhost", "root", "", "school");
+$conn = mysqli_connect("localhost", "root", "", "job_demo");
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
