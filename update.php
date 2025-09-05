@@ -1,11 +1,9 @@
 <?php
-// 1. Connect to database
 $conn = mysqli_connect("localhost", "root", "", "job_demo" , "3300");
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// 2. When form is submitted (POST request)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id       = $_POST['id'];
     $name     = $_POST['name'];
@@ -13,19 +11,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $class    = $_POST['class'];
     $gender   = $_POST['gender'];
 
-    // Subjects may be many, so join them with comma
     $subjects = "";
     if (!empty($_POST['subjects'])) {
         $subjects = implode(", ", $_POST['subjects']);
     }
 
-    // 3. Update the record in database
     $sql = "UPDATE students 
             SET name='$name', number='$number', class='$class', sex='$gender', subjects='$subjects' 
             WHERE id=$id";
 
     if (mysqli_query($conn, $sql)) {
-        // 4. After update, go back to dashboard
         header("Location: dashboard.php?msg=Updated Successfully");
         exit();
     } else {
@@ -33,49 +28,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-
 $id = $_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM students WHERE id=$id");
 $row = mysqli_fetch_assoc($result);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Update Student</title>
+  <meta charset="UTF-8">
+  <title>Update Student</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<h2>Update Student</h2>
+<body class="bg-light">
 
-<form method="post">
-    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="mb-4 text-center">Update Student</h2>
 
-    Name: <input type="text" name="name" value="<?php echo $row['name']; ?>"><br><br>
+    <form method="post">
+      <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 
-    Phone: <input type="text" name="phno" value="<?php echo $row['number']; ?>"><br><br>
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-control" name="name" value="<?php echo $row['name']; ?>">
+      </div>
 
-    Class: 
-    <select name="class">
-        <option value="8" <?php if($row['class']==8) echo "selected"; ?>>8</option>
-        <option value="9" <?php if($row['class']==9) echo "selected"; ?>>9</option>
-        <option value="10" <?php if($row['class']==10) echo "selected"; ?>>10</option>
-    </select><br><br>
+      <div class="mb-3">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-control" name="phno" value="<?php echo $row['number']; ?>">
+      </div>
 
-    Gender: 
-    <input type="radio" name="gender" value="Male"   <?php if($row['sex']=="Male") echo "checked"; ?>> Male
-    <input type="radio" name="gender" value="Female" <?php if($row['sex']=="Female") echo "checked"; ?>> Female
-    <input type="radio" name="gender" value="Other"  <?php if($row['sex']=="Other") echo "checked"; ?>> Other
-    <br><br>
+      <div class="mb-3">
+        <label class="form-label">Class</label>
+        <select class="form-select" name="class">
+          <option value="8" <?php if($row['class']==8) echo "selected"; ?>>8</option>
+          <option value="9" <?php if($row['class']==9) echo "selected"; ?>>9</option>
+          <option value="10" <?php if($row['class']==10) echo "selected"; ?>>10</option>
+        </select>
+      </div>
 
-    Subjects: 
-    <input type="checkbox" name="subjects[]" value="Maths"   <?php if(strpos($row['subjects'], "Maths")!==false) echo "checked"; ?>> Maths
-    <input type="checkbox" name="subjects[]" value="Science" <?php if(strpos($row['subjects'], "Science")!==false) echo "checked"; ?>> Science
-    <input type="checkbox" name="subjects[]" value="English" <?php if(strpos($row['subjects'], "English")!==false) echo "checked"; ?>> English
-    <input type="checkbox" name="subjects[]" value="History" <?php if(strpos($row['subjects'], "History")!==false) echo "checked"; ?>> History
-    <br><br>
+      <div class="mb-3">
+        <label class="form-label">Gender</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="gender" value="Male" <?php if($row['sex']=="Male") echo "checked"; ?>>
+          <label class="form-check-label">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="gender" value="Female" <?php if($row['sex']=="Female") echo "checked"; ?>>
+          <label class="form-check-label">Female</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="gender" value="Other" <?php if($row['sex']=="Other") echo "checked"; ?>>
+          <label class="form-check-label">Other</label>
+        </div>
+      </div>
 
-    <button type="submit">Update</button>
-</form>
+      <div class="mb-3">
+        <label class="form-label">Subjects</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="subjects[]" value="Maths" <?php if(strpos($row['subjects'], "Maths")!==false) echo "checked"; ?>>
+          <label class="form-check-label">Maths</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="subjects[]" value="Science" <?php if(strpos($row['subjects'], "Science")!==false) echo "checked"; ?>>
+          <label class="form-check-label">Science</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="subjects[]" value="English" <?php if(strpos($row['subjects'], "English")!==false) echo "checked"; ?>>
+          <label class="form-check-label">English</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="subjects[]" value="History" <?php if(strpos($row['subjects'], "History")!==false) echo "checked"; ?>>
+          <label class="form-check-label">History</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Update</button>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>
