@@ -1,6 +1,6 @@
 <?php
 // 1. Connect to database
-$conn = mysqli_connect("localhost", "root", "", "job_demo");
+$conn = mysqli_connect("localhost", "root", "", "job_demo" , "3300");
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// 5. Load student details to show in the form
+
 $id = $_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM students WHERE id=$id");
 $row = mysqli_fetch_assoc($result);

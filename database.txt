@@ -1,0 +1,11 @@
+CREATE DATABASE job_demo;
+USE job_demo;
+
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    number VARCHAR(20) NOT NULL,
+    class ENUM('8', '9', '10') NOT NULL,
+    sex ENUM('Male', 'Female', 'Other') NOT NULL,
+    subjects VARCHAR(255)
+);
